@@ -8,21 +8,22 @@ from adafruit_hid.keycode import Keycode
 
 # The pins we'll use
 keypress_pins = [
-    board.GP12,
-    board.GP19,
-    board.GP18, 
-    board.GP17, 
-    board.GP16,
-    board.GP21,
+    board.GP6,
+    board.GP5,
+    board.GP4, 
+    board.GP3, 
     board.GP10,
-    board.GP11,
     board.GP9,
     board.GP8,
-    board.GP22,
+    board.GP7,
+    board.GP21,
     board.GP20,
-    board.GP26,
-    board.GP5,
-    board.GP7
+    board.GP19,
+    board.GP18,
+    board.GP16,
+    board.GP17,
+    board.GP12,
+    board.GP11
     ]
 
 
@@ -32,7 +33,7 @@ key_pin_array = []
 # Make all pin objects inputs with pull down
 for pin in keypress_pins:
     key_pin = digitalio.DigitalInOut(pin)
-    key_pin.switch_to_input(pull=digitalio.Pull.DOWN)
+    key_pin.switch_to_input(pull=digitalio.Pull.UP)
     key_pin_array.append(key_pin)
 
 # common keys
@@ -51,86 +52,98 @@ keyboard_layout = KeyboardLayoutUS(keyboard)  # We're in the US :)
 CLK_PIN = board.GP14
 DT_PIN = board.GP15
 SW_PIN = board.GP13
-clk_last = None
 
 clk = digitalio.DigitalInOut(CLK_PIN)
 clk.direction = digitalio.Direction.INPUT
+clk.pull = digitalio.Pull.UP
 
 dt = digitalio.DigitalInOut(DT_PIN)
 dt.direction = digitalio.Direction.INPUT
+dt.pull = digitalio.Pull.UP
 
 sw = digitalio.DigitalInOut(SW_PIN)
 sw.direction = digitalio.Direction.INPUT
-sw.pull = digitalio.Pull.DOWN
+sw.pull = digitalio.Pull.UP
 
 
 
 def ccw():
     print("CCW")
+    time.sleep(0.2)
     keyboard.press(control_key, Keycode.MINUS)
     keyboard.release_all()
         
 def cw():
     print("CW")
+    time.sleep(0.2)
     keyboard.press(control_key, Keycode.EQUALS)
     keyboard.release_all()
 
+def millis():
+    return time.monotonic() * 1000
+
+previousValue = True
 
 while True:
     try:
         # ROTARY ENCODER FUNCTIONS
-        clkState = clk.value
-        if clk_last is not None:
-            if(clk_last !=  clkState):
-                if(dt.value != clkState):
+        if previousValue != clk.value:
+            if clk.value == False:
+                if dt.value:
                     cw()
+                    time.sleep(0.3)
                 else:
                     ccw()
-                
+                    time.sleep(0.3)
+
+        previousValues = clk.value 
+        
         if not sw.value:
             print("rot pressed!")
             keyboard.press(control_key, Keycode.ZERO)
             keyboard.release_all()
-                
-        clk_last = clkState
 
-        # KEYBOARD FUNCTIONS
+
+        # Sadly, python dont have switch case :(
         for i in range(len(key_pin_array)):
-            if key_pin_array[i].value:
-                # Sadly, python dont have switch case :(
+            if not key_pin_array[i].value:
+                print(f"Key {i} pressed!")
                 if i == 0:
-                    keyboard.press(control_key, Keycode.FORWARD_SLASH)
+                    keyboard.press(control_key, Keycode.K, Keycode.W)
                 if i == 1:
-                    keyboard.press(control_key, shift_key, Keycode.LEFT_ARROW)
-                if i == 2:
-                    keyboard.press(control_key, shift_key, Keycode.RIGHT_ARROW)
-                if i == 3:
-                    keyboard.press(alt_key, Keycode.UP_ARROW)
-                if i == 4:
-                    keyboard.press(alt_key, Keycode.DOWN_ARROW)
-                if i == 5:
-                    keyboard.press(control_key, Keycode.B)
-                if i == 6:
-                    keyboard.press(alt_key, Keycode.RIGHT_ARROW)
-                if i == 7:
-                    keyboard.press(alt_key, Keycode.LEFT_ARROW)
-                if i == 8:
-                    keyboard.press(control_key, Keycode.F)
-                if i == 9:
-                    keyboard.press(control_key, Keycode.H)
-                if i == 10:
-                    keyboard.press(control_key, shift_key, Keycode.F)
-                if i == 11:
-                    keyboard.press(control_key, Keycode.P)
-                if i == 12:
-                    keyboard.press(control_key, Keycode.BACKSLASH)
-                if i == 13:
-                    keyboard.press(control_key, shift_key, Keycode.FIVE)
-                if i == 14:
                     keyboard.press(control_key, Keycode.GRAVE_ACCENT)
+                if i == 2:
+                    keyboard.press(control_key, shift_key, Keycode.FIVE)
+                if i == 3:
+                    keyboard.press(control_key, Keycode.BACKSLASH)
+                if i == 4:
+                    keyboard.press(control_key, Keycode.F)
+                if i == 5:
+                    keyboard.press(control_key, Keycode.H)
+                if i == 6:
+                    keyboard.press(control_key, shift_key, Keycode.F)
+                if i == 7:
+                    keyboard.press(control_key, Keycode.P)
+                if i == 8:
+                    keyboard.press(alt_key, Keycode.RIGHT_ARROW)
+                if i == 9:
+                    keyboard.press(alt_key, Keycode.LEFT_ARROW)
+                if i == 10:
+                    keyboard.press(control_key, Keycode.B)
+                if i == 11:
+                    keyboard.press(alt_key, Keycode.UP_ARROW)
+                if i == 12:
+                    keyboard.press(control_key, Keycode.FORWARD_SLASH)
+                if i == 13:
+                    keyboard.press(control_key, shift_key, Keycode.LEFT_ARROW)
+                if i == 14:
+                    keyboard.press(control_key, shift_key, Keycode.RIGHT_ARROW)
+                if i == 15:
+                    keyboard.press(alt_key, Keycode.DOWN_ARROW)
                 
                 keyboard.release_all()
                 time.sleep(0.3)
     except KeyboardInterrupt:
         # because we dont want to stop the keyboard function once we try Ctrl+C
         pass
+   
