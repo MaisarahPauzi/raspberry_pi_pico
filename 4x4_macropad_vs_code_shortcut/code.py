@@ -77,56 +77,60 @@ def cw():
 
 
 while True:
-    # ROTARY ENCODER FUNCTIONS
-    clkState = clk.value
-    if clk_last is not None:
-        if(clk_last !=  clkState):
-            if(dt.value != clkState):
-                cw()
-            else:
-                ccw()
-            
-    if not sw.value:
-        print("rot pressed!")
-        keyboard.press(control_key, Keycode.ZERO)
-        keyboard.release_all()
-            
-    clk_last = clkState
-
-    # KEYBOARD FUNCTIONS
-    for i in range(len(key_pin_array)):
-        if key_pin_array[i].value:
-            # Sadly, python dont have switch case :(
-            if i == 0:
-                keyboard.press(control_key, Keycode.FORWARD_SLASH)
-            if i == 1:
-                keyboard.press(control_key, shift_key, Keycode.LEFT_ARROW)
-            if i == 2:
-                keyboard.press(control_key, shift_key, Keycode.RIGHT_ARROW)
-            if i == 3:
-                keyboard.press(alt_key, Keycode.UP_ARROW)
-            if i == 4:
-                keyboard.press(alt_key, Keycode.DOWN_ARROW)
-            if i == 5:
-                keyboard.press(control_key, Keycode.B)
-            if i == 6:
-                keyboard.press(alt_key, Keycode.RIGHT_ARROW)
-            if i == 7:
-                keyboard.press(alt_key, Keycode.LEFT_ARROW)
-            if i == 8:
-                keyboard.press(control_key, Keycode.F)
-            if i == 9:
-                keyboard.press(control_key, Keycode.H)
-            if i == 10:
-                keyboard.press(control_key, shift_key, Keycode.F)
-            if i == 11:
-                keyboard.press(control_key, Keycode.P)
-            if i == 12:
-                keyboard.press(control_key, Keycode.BACKSLASH)
-            if i == 13:
-                keyboard.press(control_key, shift_key, Keycode.FIVE)
-            if i == 14:
-                keyboard.press(control_key, Keycode.GRAVE_ACCENT)
-            
+    try:
+        # ROTARY ENCODER FUNCTIONS
+        clkState = clk.value
+        if clk_last is not None:
+            if(clk_last !=  clkState):
+                if(dt.value != clkState):
+                    cw()
+                else:
+                    ccw()
+                
+        if not sw.value:
+            print("rot pressed!")
+            keyboard.press(control_key, Keycode.ZERO)
             keyboard.release_all()
-            time.sleep(0.3)
+                
+        clk_last = clkState
+
+        # KEYBOARD FUNCTIONS
+        for i in range(len(key_pin_array)):
+            if key_pin_array[i].value:
+                # Sadly, python dont have switch case :(
+                if i == 0:
+                    keyboard.press(control_key, Keycode.FORWARD_SLASH)
+                if i == 1:
+                    keyboard.press(control_key, shift_key, Keycode.LEFT_ARROW)
+                if i == 2:
+                    keyboard.press(control_key, shift_key, Keycode.RIGHT_ARROW)
+                if i == 3:
+                    keyboard.press(alt_key, Keycode.UP_ARROW)
+                if i == 4:
+                    keyboard.press(alt_key, Keycode.DOWN_ARROW)
+                if i == 5:
+                    keyboard.press(control_key, Keycode.B)
+                if i == 6:
+                    keyboard.press(alt_key, Keycode.RIGHT_ARROW)
+                if i == 7:
+                    keyboard.press(alt_key, Keycode.LEFT_ARROW)
+                if i == 8:
+                    keyboard.press(control_key, Keycode.F)
+                if i == 9:
+                    keyboard.press(control_key, Keycode.H)
+                if i == 10:
+                    keyboard.press(control_key, shift_key, Keycode.F)
+                if i == 11:
+                    keyboard.press(control_key, Keycode.P)
+                if i == 12:
+                    keyboard.press(control_key, Keycode.BACKSLASH)
+                if i == 13:
+                    keyboard.press(control_key, shift_key, Keycode.FIVE)
+                if i == 14:
+                    keyboard.press(control_key, Keycode.GRAVE_ACCENT)
+                
+                keyboard.release_all()
+                time.sleep(0.3)
+    except KeyboardInterrupt:
+        # because we dont want to stop the keyboard function once we try Ctrl+C
+        pass
