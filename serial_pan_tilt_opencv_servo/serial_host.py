@@ -3,7 +3,7 @@ import serial
 class Sender:
     TERMINATOR = '\r'.encode('UTF8')
 
-    def __init__(self, device='COM6', baud=115200, timeout=1):
+    def __init__(self, device='COM12', baud=115200, timeout=1):
         self.serial = serial.Serial(device, baud, timeout=timeout)
 
     def receive(self) -> str:

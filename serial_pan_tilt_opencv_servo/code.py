@@ -4,8 +4,8 @@ import board
 import pwmio
 from adafruit_motor import servo
 
-pwm1 = pwmio.PWMOut(board.GP27, duty_cycle=2 ** 15, frequency=50)
-pwm2 = pwmio.PWMOut(board.GP26, duty_cycle=2 ** 15, frequency=50)
+pwm1 = pwmio.PWMOut(board.GP14, duty_cycle=2 ** 15, frequency=50)
+pwm2 = pwmio.PWMOut(board.GP15, duty_cycle=2 ** 15, frequency=50)
 
 tilt_servo = servo.Servo(pwm1)
 pan_servo = servo.Servo(pwm2)
