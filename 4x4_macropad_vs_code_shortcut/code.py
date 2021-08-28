@@ -125,9 +125,9 @@ while True:
                 if i == 7:
                     keyboard.press(control_key, Keycode.P)
                 if i == 8:
-                    keyboard.press(alt_key, Keycode.RIGHT_ARROW)
+                    keyboard.press(control_key, Keycode.G)
                 if i == 9:
-                    keyboard.press(alt_key, Keycode.LEFT_ARROW)
+                    keyboard.press(alt_key, shift_key, Keycode.TAB)
                 if i == 10:
                     keyboard.press(control_key, Keycode.B)
                 if i == 11:
@@ -146,4 +146,3 @@ while True:
     except KeyboardInterrupt:
         # because we dont want to stop the keyboard function once we try Ctrl+C
         pass
-   
